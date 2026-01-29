@@ -11,6 +11,13 @@ def calculate_yield(total_checks, failed_checks):
 
 @mock_aws
 def run_audit():
+
+    # --- RANDOM DELAY ---
+    # Generate a random sleep time between 1 minute and 4 hours (14400 seconds)
+    sleep_seconds = random.randint(60, 14400) 
+    print(f"Waiting for {sleep_seconds // 60} minutes to simulate organic activity...")
+    time.sleep(sleep_seconds)
+    
     # 1. Setup Mock Environment
     s3 = boto3.client("s3", region_name="us-east-1")
     s3.create_bucket(Bucket="public-sensitive-data") 
