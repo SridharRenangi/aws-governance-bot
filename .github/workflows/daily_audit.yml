@@ -1,0 +1,26 @@
+name: Daily AWS Governance Audit
+on:
+  schedule:
+    - cron: '0 9 * * *' # Runs every day at 9 AM
+  workflow_dispatch: # Allows you to click "Run" manually
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Audit
+        run: python auditor.py
+      - name: Commit Report
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add AUDIT_REPORT.md
+          git commit -m "Auto-generated daily security audit: $(date +'%Y-%m-%d')"
+          git push
